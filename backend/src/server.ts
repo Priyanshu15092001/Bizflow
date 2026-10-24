@@ -1,3 +1,6 @@
+import app from './app.js';
 import { env } from './config/env.js';
 
-console.log(`BizFlow backend is alive on port ${env.PORT}`);
+app.listen(env.PORT, () => {
+  console.log(`BizFlow backend running on http://localhost:${env.PORT}`);
+});
