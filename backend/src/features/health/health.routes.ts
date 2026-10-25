@@ -1,12 +1,19 @@
-import { Router } from 'express';
+   import { Router } from "express";
+   import { checkDatabase } from "./health.service.js";
 
-const router = Router();
+   const router = Router();
 
-router.get('/', (_req, res) => {
-  res.json({
-    success: true,
-    data: { status: 'ok', uptime: process.uptime() },
-  });
-});
+   router.get("/", async (_req, res) => {
+     const dbOk = await checkDatabase();
 
-export default router;
+     res.status(dbOk ? 200 : 503).json({
+       success: dbOk,
+       data: {
+         status: dbOk ? "ok" : "degraded",
+         database: dbOk ? "connected" : "disconnected",
+         uptime: process.uptime(),
+       },
+     });
+   });
+
+   export default router;
